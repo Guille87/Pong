@@ -308,7 +308,7 @@ GameObject:
   - component: {fileID: 119917086}
   m_Layer: 0
   m_Name: Circle desplazamiento (1)
-  m_TagString: Untagged
+  m_TagString: Circulos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -770,7 +770,7 @@ GameObject:
   - component: {fileID: 281273526}
   m_Layer: 0
   m_Name: Circle desplazamiento
-  m_TagString: Untagged
+  m_TagString: Circulos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1261,7 +1261,7 @@ GameObject:
   - component: {fileID: 371133029}
   m_Layer: 0
   m_Name: LimiteSuperior
-  m_TagString: Untagged
+  m_TagString: LimiteSuperior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1482,7 +1482,7 @@ GameObject:
   - component: {fileID: 433424496}
   m_Layer: 0
   m_Name: LimiteInferior
-  m_TagString: Untagged
+  m_TagString: LimiteInferior
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3769,8 +3769,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e27a6c9ad6616e943aa3d03d395d283b, type: 2}
+  m_sharedMaterial: {fileID: -6221382144833628577, guid: e27a6c9ad6616e943aa3d03d395d283b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3859,7 +3859,7 @@ GameObject:
   - component: {fileID: 1548870710}
   m_Layer: 0
   m_Name: Circle estatico (1)
-  m_TagString: Untagged
+  m_TagString: Circulos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4157,6 +4157,7 @@ GameObject:
   - component: {fileID: 1700222531}
   - component: {fileID: 1700222534}
   - component: {fileID: 1700222535}
+  - component: {fileID: 1700222536}
   m_Layer: 0
   m_Name: Pelota
   m_TagString: Untagged
@@ -4309,12 +4310,112 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefe6e3de4b181a408c94361a6c6ca29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  sfxPaddle: {fileID: 8300000, guid: 9653452385f634942806e836e545cf7d, type: 3}
+  sfxWall: {fileID: 8300000, guid: 6e21cc304f618b04ebbebc65746005ef, type: 3}
+  sfxFail: {fileID: 8300000, guid: 7076faf3204e0e24aa522e7c237f685e, type: 3}
   manager: {fileID: 2035747924}
   force: 1
   delay: 2
   speedIncrement: 1.1
   minY: -2.5
   maxY: 2.5
+--- !u!82 &1700222536
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1700222530}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 9653452385f634942806e836e545cf7d, type: 3}
+  m_Resource: {fileID: 8300000, guid: 9653452385f634942806e836e545cf7d, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1764809796
 GameObject:
   m_ObjectHideFlags: 0
@@ -4595,8 +4696,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 0
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: e27a6c9ad6616e943aa3d03d395d283b, type: 2}
+  m_sharedMaterial: {fileID: -6221382144833628577, guid: e27a6c9ad6616e943aa3d03d395d283b, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4685,7 +4786,7 @@ GameObject:
   - component: {fileID: 1985480645}
   m_Layer: 0
   m_Name: Circle estatico
-  m_TagString: Untagged
+  m_TagString: Circulos
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

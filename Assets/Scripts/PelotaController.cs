@@ -3,7 +3,13 @@ using UnityEngine;
 
 public class PelotaController : MonoBehaviour
 {
+    [Header("Audio Clips")]
+    [SerializeField] AudioClip sfxPaddle;
+    [SerializeField] AudioClip sfxWall;
+    [SerializeField] AudioClip sfxFail;
+
     Rigidbody2D rb;
+    AudioSource sfx;
     [SerializeField] GameManager manager;
     [SerializeField] float force;
     [SerializeField] float delay;
@@ -14,10 +20,12 @@ public class PelotaController : MonoBehaviour
 
     const float MIN_ANG = 25.0f;
     const float MAX_ANG = 40.0f;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
+        sfx = GetComponent<AudioSource>();
+        sfx.volume = 0.2f;
+
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         if (manager == null) {
@@ -27,27 +35,34 @@ public class PelotaController : MonoBehaviour
         StartCoroutine(LanzarPelota(direccionX));
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         string tag = other.gameObject.tag;
 
-        if (tag == "Pala1" || tag == "Pala2")
+        if (tag == "Pala1" || tag == "Pala2" || tag == "Pala3" || tag == "Pala4")
+        {
+            sfx.clip = sfxPaddle;
+            sfx.Play();
             IncrementarVelocidad();
+        }
+        else if (tag == "LimiteSuperior" || tag == "LimiteInferior" || tag == "Circulos")
+        {
+            sfx.clip = sfxWall;
+            sfx.Play();
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Porteria2")) {
+            sfx.clip = sfxFail;
+            sfx.Play();
             manager.addPointP1();
             StartCoroutine(LanzarPelota(1));
         }
         else if(other.CompareTag("Porteria1")) {
+            sfx.clip = sfxFail;
+            sfx.Play();
             manager.addPointP2();
             StartCoroutine(LanzarPelota(-1));
         }
@@ -77,7 +92,6 @@ public class PelotaController : MonoBehaviour
         float x = Mathf.Cos(angulo) * direccionX;
         int direccionY = Random.Range(0, 2) == 0 ? -1 : 1;
         float y = Mathf.Sin(angulo) * direccionY;
-        Debug.Log("angulo = "+ angulo + "; x = " + x + "; y = " + y);
         return new Vector2(x, y);
     }
 
@@ -86,6 +100,5 @@ public class PelotaController : MonoBehaviour
         // Incrementa la velocidad actual de la pelota
         Vector2 velocidadActual = rb.linearVelocity;
         rb.linearVelocity = velocidadActual * speedIncrement;
-        Debug.Log("Nueva velocidad: " + rb.linearVelocity);
     }
 }

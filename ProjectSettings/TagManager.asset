@@ -10,6 +10,9 @@ TagManager:
   - Pala4
   - Porteria1
   - Porteria2
+  - LimiteSuperior
+  - LimiteInferior
+  - Circulos
   layers:
   - Default
   - TransparentFX
