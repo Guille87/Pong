@@ -9,7 +9,8 @@ public class PelotaController : MonoBehaviour
     [SerializeField] AudioClip sfxFail;
 
     Rigidbody2D rb;
-    AudioSource sfx;
+
+    [Header("Settings")]
     [SerializeField] GameManager manager;
     [SerializeField] float force;
     [SerializeField] float delay;
@@ -23,9 +24,6 @@ public class PelotaController : MonoBehaviour
     
     void Start()
     {
-        sfx = GetComponent<AudioSource>();
-        sfx.volume = 0.2f;
-
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         if (manager == null) {
@@ -41,29 +39,31 @@ public class PelotaController : MonoBehaviour
 
         if (tag == "Pala1" || tag == "Pala2" || tag == "Pala3" || tag == "Pala4")
         {
-            sfx.clip = sfxPaddle;
-            sfx.Play();
+            AudioManager.PlaySound(sfxPaddle, 0.2f);
             IncrementarVelocidad();
         }
         else if (tag == "LimiteSuperior" || tag == "LimiteInferior" || tag == "Circulos")
         {
-            sfx.clip = sfxWall;
-            sfx.Play();
+            AudioManager.PlaySound(sfxWall, 0.2f);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Porteria2")) {
-            sfx.clip = sfxFail;
-            sfx.Play();
+            AudioManager.PlaySound(sfxFail, 0.2f);
             manager.addPointP1();
+
+            if (manager.IsGameOver()) return;
+
             StartCoroutine(LanzarPelota(1));
         }
         else if(other.CompareTag("Porteria1")) {
-            sfx.clip = sfxFail;
-            sfx.Play();
+            AudioManager.PlaySound(sfxFail, 0.2f);
             manager.addPointP2();
+            
+            if (manager.IsGameOver()) return;
+
             StartCoroutine(LanzarPelota(-1));
         }
     }
@@ -83,6 +83,18 @@ public class PelotaController : MonoBehaviour
 
         // Aplicamos el impulso
         rb.AddForce(impulso * force, ForceMode2D.Impulse);
+    }
+
+    public void ResetPelota(int direccionX)
+    {
+        // Detén la velocidad actual
+        rb.linearVelocity = Vector2.zero;
+
+        // Reposiciona la pelota al centro
+        transform.position = Vector3.zero;
+
+        // Opcional: lanza la pelota automáticamente o espera a que el jugador la active
+        StartCoroutine(LanzarPelota(direccionX));
     }
 
     private Vector2 ObtenerDireccionAleatoria(int direccionX)
