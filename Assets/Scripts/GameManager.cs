@@ -1,154 +1,81 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] TextMeshProUGUI tmpScoreP1;
-    [SerializeField] TextMeshProUGUI tmpScoreP2;
-    [SerializeField] TextMeshProUGUI tmpWinText;
-    [SerializeField] TextMeshProUGUI tmpRestartText;
-    [SerializeField] GameObject pelota;
+    [Header("Referencias")]
+    [SerializeField] private UIManager uiManager;
+    [SerializeField] private PelotaController pelota;
 
-    int p1Score;
-    int p2Score;
+    [Header("Ajustes")]
+    [SerializeField] private int puntosParaGanar = 10;
 
-    bool running = false;
+    private int p1Score;
+    private int p2Score;
+    private bool juegoEnCurso = false;
 
-    const int WIN_SCORE = 10;
-
-    // Métodos para el sistema de eventos
-    public void OnSalir(InputAction.CallbackContext context)
+    void Start()
     {
-        if (context.ReadValue<float>() == 1) Application.Quit();
+        Cursor.visible = false;
+        uiManager.ActualizarPuntuacion(0, 0);
+        uiManager.OcultarMensajes();
+    }
+
+    public void SumarPuntoP1() => ProcesarPunto(ref p1Score, 1);
+    public void SumarPuntoP2() => ProcesarPunto(ref p2Score, 2);
+
+    private void ProcesarPunto(ref int score, int direccionLanzamiento)
+    {
+        score++;
+        uiManager.ActualizarPuntuacion(p1Score, p2Score);
+
+        if (score >= puntosParaGanar)
+        {
+            TerminarJuego(direccionLanzamiento == 1 ? 1 : 2);
+        }
+        else
+        {
+            pelota.LanzarDesdeCentro(direccionLanzamiento);
+        }
+    }
+
+    private void TerminarJuego(int ganador)
+    {
+        juegoEnCurso = false;
+        pelota.gameObject.SetActive(false);
+        uiManager.MostrarMensajeVictoria(ganador);
     }
 
     public void OnReiniciar(InputAction.CallbackContext context)
     {
-        if (IsGameOver() && context.ReadValue<float>() == 1) RestartGame();
+        if (context.started && !juegoEnCurso) ReiniciarPartida();
+    }
+
+    // Métodos para el sistema de eventos
+    public void OnSalir(InputAction.CallbackContext context)
+    {
+        if (context.started) Application.Quit();
     }
 
     public void OnLanzar(InputAction.CallbackContext context)
     {
-        if (!running && !IsGameOver() && context.ReadValue<float>() == 1)
+        if (context.started && !juegoEnCurso)
         {
-            pelota.SetActive(true);
-            running = true;
+            juegoEnCurso = true;
+            pelota.gameObject.SetActive(true);
+            uiManager.ToggleStartText(false);
         }
     }
 
-    public void addPointP1() {
-        p1Score++;
-        UpdateScores();
-        CheckWinCondition();
-    }
-
-    public void addPointP2() {
-        p2Score++;
-        UpdateScores();
-        CheckWinCondition();
-    }
-    
-    void Start()
+    private void ReiniciarPartida()
     {
-        Cursor.visible = false;
-        UpdateScores();
-        tmpWinText.gameObject.SetActive(false);
-        tmpRestartText.gameObject.SetActive(false);
-    }
-
-    void Update()
-    {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame)
-        {
-            Application.Quit();
-        }
-
-        // Maneja el reinicio del juego después de un ganador
-        if (IsGameOver() && Keyboard.current.rKey.wasPressedThisFrame)
-        {
-            RestartGame();
-        }
-        
-        // Solo inicia la pelota si el juego no ha terminado
-        if (!running && !IsGameOver() && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            pelota.SetActive(true);
-            running = true;
-        }
-    }
-    
-    void UpdateScores() {
-        tmpScoreP1.text = p1Score.ToString();
-        tmpScoreP2.text = p2Score.ToString();
-    }
-
-    // Verificar si un jugador ha alcanzado el puntaje necesario para ganar
-    void CheckWinCondition()
-    {
-        if (p1Score >= WIN_SCORE)
-        {
-            Win(1);
-        }
-        else if (p2Score >= WIN_SCORE)
-        {
-            Win(2);
-        }
-    }
-
-    // Mostrar el mensaje de victoria y reiniciar el juego
-    void Win(int ganador)
-    {
-        tmpWinText.gameObject.SetActive(true);
-        tmpRestartText.gameObject.SetActive(true);
-
-        // Actualiza el texto dependiendo del ganador
-        if (ganador == 1)
-        {
-            tmpWinText.text = "JUGADOR 1 Y JUGADOR 3 GANAN";
-        }
-        else if (ganador == 2)
-        {
-            tmpWinText.text = "JUGADOR 2 Y JUGADOR 4 GANAN";
-        }
-
-        tmpRestartText.text = "PRESIONA 'R' PARA VOLVER A JUGAR";
-
-        // Desactivar la pelota y detener el juego por un momento
-        pelota.SetActive(false);
-        running = false;
-    }
-
-    public bool IsGameOver()
-    {
-        return p1Score >= WIN_SCORE || p2Score >= WIN_SCORE;
-    }
-
-    // Método para reiniciar el juego (recarga la escena actual)
-    void RestartGame()
-    {
-        // Reiniciar puntuaciones
         p1Score = 0;
         p2Score = 0;
-        UpdateScores();
+        uiManager.ActualizarPuntuacion(0, 0);
+        uiManager.OcultarMensajes();
+        uiManager.ToggleStartText(true);
 
-        // Reactivar pelota
-        pelota.SetActive(true);
-
-        // Obtener la referencia al script de la pelota
-        PelotaController pelotaController = pelota.GetComponent<PelotaController>();
-
-        // Reiniciar movimiento de la pelota
-        if (pelotaController != null)
-        {
-            int direccionX = Random.Range(0, 2) == 0 ? -1 : 1;
-            pelotaController.ResetPelota(direccionX);
-        }
-
-        // Ocultar el mensaje de victoria y reinicio
-        tmpWinText.gameObject.SetActive(false);
-        tmpRestartText.gameObject.SetActive(false);
-
-        running = false; // Espera a que el jugador presione espacio para lanzar la pelota
+        juegoEnCurso = true;
+        pelota.gameObject.SetActive(true);
     }
 }

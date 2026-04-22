@@ -3,114 +3,78 @@ using UnityEngine;
 
 public class PelotaController : MonoBehaviour
 {
-    [Header("Audio Clips")]
-    [SerializeField] AudioClip sfxPaddle;
-    [SerializeField] AudioClip sfxWall;
-    [SerializeField] AudioClip sfxFail;
+    [Header("Audio")]
+    [SerializeField] private AudioClip sfxPaddle;
+    [SerializeField] private AudioClip sfxWall;
+    [SerializeField] private AudioClip sfxFail;
+
+    [Header("Física")]
+    [SerializeField] private float fuerzaInicial = 10f;
+    [SerializeField] private float multiplicadorVelocidad = 1.05f;
+    [SerializeField] private float velocidadMaxima = 25f; // Límite para evitar errores de física
+    [SerializeField] private float delayLanzamiento = 1f;
 
     Rigidbody2D rb;
 
-    [Header("Settings")]
-    [SerializeField] GameManager manager;
-    [SerializeField] float force;
-    [SerializeField] float delay;
-    [SerializeField] float speedIncrement = 1.05f; // Incremento del 5% por rebote
+    private const float MIN_ANG = 25f;
+    private const float MAX_ANG = 40f;
 
-    [SerializeField] float minY = -2.5f;
-    [SerializeField] float maxY = 2.5f;
+    void Awake() => rb = GetComponent<Rigidbody2D>();
 
-    const float MIN_ANG = 25.0f;
-    const float MAX_ANG = 40.0f;
-    
-    void Start()
+    void OnEnable() => ResetPelota(Random.Range(0, 2) == 0 ? -1 : 1);
+
+    public void ResetPelota(int direccionX)
     {
-        rb = GetComponent<Rigidbody2D>();
-        rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
-        if (manager == null) {
-            manager = FindAnyObjectByType<GameManager>();
-        }
-        int direccionX = Random.Range(0, 2) == 0 ? -1 : 1;
+        rb.linearVelocity = Vector2.zero;
+        transform.position = Vector2.zero;
         StartCoroutine(LanzarPelota(direccionX));
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        string tag = other.gameObject.tag;
+    public void LanzarDesdeCentro(int direccionX) => ResetPelota(direccionX);
 
-        if (tag == "Pala1" || tag == "Pala2" || tag == "Pala3" || tag == "Pala4")
+    private IEnumerator LanzarPelota(int direccionX)
+    {
+        yield return new WaitForSeconds(delayLanzamiento);
+        
+        float angulo = Random.Range(MIN_ANG, MAX_ANG) * Mathf.Deg2Rad;
+        int direccionY = Random.value > 0.5f ? 1 : -1;
+        Vector2 direccionVector = new Vector2(Mathf.Cos(angulo) * direccionX, Mathf.Sin(angulo) * direccionY);
+        
+        rb.linearVelocity = direccionVector * fuerzaInicial;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Pala")) // Tag genérico para todas las palas
         {
-            AudioManager.PlaySound(sfxPaddle, 0.2f);
+            AudioManager.Instance.PlaySound(sfxPaddle, 0.2f);
             IncrementarVelocidad();
         }
-        else if (tag == "LimiteSuperior" || tag == "LimiteInferior" || tag == "Circulos")
+        else
         {
-            AudioManager.PlaySound(sfxWall, 0.2f);
+            AudioManager.Instance.PlaySound(sfxWall, 0.2f);
+        }
+    }
+
+    private void IncrementarVelocidad()
+    {
+        Vector2 nuevaVelocidad = rb.linearVelocity * multiplicadorVelocidad;
+        
+        if (nuevaVelocidad.magnitude <= velocidadMaxima)
+        {
+            rb.linearVelocity = nuevaVelocidad;
+        }
+        else
+        {
+            rb.linearVelocity = nuevaVelocidad.normalized * velocidadMaxima;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Porteria2")) {
-            AudioManager.PlaySound(sfxFail, 0.2f);
-            manager.addPointP1();
-
-            if (manager.IsGameOver()) return;
-
-            StartCoroutine(LanzarPelota(1));
+        if (other.CompareTag("Porteria"))
+        {
+            AudioManager.Instance.PlaySound(sfxFail, 0.3f);
         }
-        else if(other.CompareTag("Porteria1")) {
-            AudioManager.PlaySound(sfxFail, 0.2f);
-            manager.addPointP2();
-            
-            if (manager.IsGameOver()) return;
-
-            StartCoroutine(LanzarPelota(-1));
-        }
-    }
-
-    IEnumerator LanzarPelota(int direccionX)
-    {
-        yield return new WaitForSeconds(delay);
-        
-        // Cálculo de la posición vertical del lanzamiento
-        float posY = Random.Range(minY, maxY);
-        transform.position = new Vector3(0, posY, 0);
-
-        Vector2 impulso = ObtenerDireccionAleatoria(direccionX);
-
-        // Resetear la velocidad lineal de la pelota
-        rb.linearVelocity = Vector2.zero;
-
-        // Aplicamos el impulso
-        rb.AddForce(impulso * force, ForceMode2D.Impulse);
-    }
-
-    public void ResetPelota(int direccionX)
-    {
-        // Detén la velocidad actual
-        rb.linearVelocity = Vector2.zero;
-
-        // Reposiciona la pelota al centro
-        transform.position = Vector3.zero;
-
-        // Opcional: lanza la pelota automáticamente o espera a que el jugador la active
-        StartCoroutine(LanzarPelota(direccionX));
-    }
-
-    private Vector2 ObtenerDireccionAleatoria(int direccionX)
-    {
-        // Cálculo del vector del lanzamiento
-        float angulo = Random.Range(MIN_ANG, MAX_ANG) * Mathf.Deg2Rad;
-        float x = Mathf.Cos(angulo) * direccionX;
-        int direccionY = Random.Range(0, 2) == 0 ? -1 : 1;
-        float y = Mathf.Sin(angulo) * direccionY;
-        return new Vector2(x, y);
-    }
-
-    private void IncrementarVelocidad()
-    {
-        // Incrementa la velocidad actual de la pelota
-        Vector2 velocidadActual = rb.linearVelocity;
-        rb.linearVelocity = velocidadActual * speedIncrement;
     }
 }

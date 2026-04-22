@@ -489,7 +489,7 @@ GameObject:
   - component: {fileID: 162998797}
   m_Layer: 0
   m_Name: Pala3
-  m_TagString: Pala3
+  m_TagString: Pala
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1214,7 +1214,7 @@ GameObject:
   - component: {fileID: 340472973}
   m_Layer: 0
   m_Name: Pala4
-  m_TagString: Pala4
+  m_TagString: Pala
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3368,7 +3368,7 @@ GameObject:
   - component: {fileID: 949013953}
   m_Layer: 0
   m_Name: Pala2
-  m_TagString: Pala2
+  m_TagString: Pala
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3946,9 +3946,10 @@ GameObject:
   - component: {fileID: 1143086086}
   - component: {fileID: 1143086088}
   - component: {fileID: 1143086087}
+  - component: {fileID: 1143086089}
   m_Layer: 0
   m_Name: LimiteDerecho
-  m_TagString: Porteria2
+  m_TagString: Porteria
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4073,6 +4074,33 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1143086089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143086085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d554d927ee3107f4ca3403361643d698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Porteria
+  alMarcarGol:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2035747924}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SumarPuntoP1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1350352213
 GameObject:
   m_ObjectHideFlags: 0
@@ -4088,7 +4116,7 @@ GameObject:
   - component: {fileID: 1350352218}
   m_Layer: 0
   m_Name: Pala1
-  m_TagString: Pala1
+  m_TagString: Pala
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4847,7 +4875,7 @@ GameObject:
   - component: {fileID: 1700222536}
   m_Layer: 0
   m_Name: Pelota
-  m_TagString: Untagged
+  m_TagString: Pelota
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5004,12 +5032,9 @@ MonoBehaviour:
   sfxPaddle: {fileID: 8300000, guid: 9653452385f634942806e836e545cf7d, type: 3}
   sfxWall: {fileID: 8300000, guid: 6e21cc304f618b04ebbebc65746005ef, type: 3}
   sfxFail: {fileID: 8300000, guid: 7076faf3204e0e24aa522e7c237f685e, type: 3}
-  manager: {fileID: 2035747924}
-  force: 1
-  delay: 2
-  speedIncrement: 1.1
-  minY: -2.5
-  maxY: 2.5
+  fuerzaInicial: 1
+  multiplicadorVelocidad: 1.05
+  delayLanzamiento: 1
 --- !u!82 &1700222536
 AudioSource:
   m_ObjectHideFlags: 0
@@ -5118,9 +5143,10 @@ GameObject:
   - component: {fileID: 1764809797}
   - component: {fileID: 1764809799}
   - component: {fileID: 1764809798}
+  - component: {fileID: 1764809800}
   m_Layer: 0
   m_Name: LimiteIzquierdo
-  m_TagString: Porteria1
+  m_TagString: Porteria
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5245,6 +5271,33 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1764809800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1764809796}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d554d927ee3107f4ca3403361643d698, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Porteria
+  alMarcarGol:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2035747924}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: SumarPuntoP2
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1832725659
 GameObject:
   m_ObjectHideFlags: 0
@@ -5767,8 +5820,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1143086086}
   - {fileID: 1764809797}
+  - {fileID: 1143086086}
   - {fileID: 371133028}
   - {fileID: 433424495}
   m_Father: {fileID: 0}
@@ -5784,6 +5837,7 @@ GameObject:
   - component: {fileID: 2035747925}
   - component: {fileID: 2035747924}
   - component: {fileID: 2035747926}
+  - component: {fileID: 2035747927}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -5803,11 +5857,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 337d1025d63db70478130a06e863ec79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmpScoreP1: {fileID: 1486590127}
-  tmpScoreP2: {fileID: 1896954866}
-  tmpWinText: {fileID: 1832725661}
-  tmpRestartText: {fileID: 714477136}
-  pelota: {fileID: 1700222530}
+  uiManager: {fileID: 2035747927}
+  pelota: {fileID: 1700222535}
+  puntosParaGanar: 10
 --- !u!4 &2035747925
 Transform:
   m_ObjectHideFlags: 0
@@ -5917,6 +5969,23 @@ MonoBehaviour:
   m_DefaultActionMap: Gameplay
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &2035747927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2035747923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2dd23fa60847a340bf1c0e3a560e971, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  tmpScoreP1: {fileID: 1486590127}
+  tmpScoreP2: {fileID: 1896954866}
+  tmpWinText: {fileID: 1832725661}
+  tmpRestartText: {fileID: 714477136}
+  tmpStartText: {fileID: 0}
 --- !u!1 &2109288521
 GameObject:
   m_ObjectHideFlags: 0

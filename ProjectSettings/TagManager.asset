@@ -4,15 +4,12 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Pala1
-  - Pala2
-  - Pala3
-  - Pala4
-  - Porteria1
-  - Porteria2
   - LimiteSuperior
   - LimiteInferior
   - Circulos
+  - Pala
+  - Porteria
+  - Pelota
   layers:
   - Default
   - TransparentFX
@@ -52,3 +49,4 @@ TagManager:
     locked: 0
   m_RenderingLayers:
   - Default
+  m_MigratedRenderPipelines: []
