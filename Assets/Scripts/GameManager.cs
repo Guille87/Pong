@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,6 +16,26 @@ public class GameManager : MonoBehaviour
     bool running = false;
 
     const int WIN_SCORE = 10;
+
+    // Métodos para el sistema de eventos
+    public void OnSalir(InputAction.CallbackContext context)
+    {
+        if (context.ReadValue<float>() == 1) Application.Quit();
+    }
+
+    public void OnReiniciar(InputAction.CallbackContext context)
+    {
+        if (IsGameOver() && context.ReadValue<float>() == 1) RestartGame();
+    }
+
+    public void OnLanzar(InputAction.CallbackContext context)
+    {
+        if (!running && !IsGameOver() && context.ReadValue<float>() == 1)
+        {
+            pelota.SetActive(true);
+            running = true;
+        }
+    }
 
     public void addPointP1() {
         p1Score++;
@@ -38,19 +59,19 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Keyboard.current.escapeKey.wasPressedThisFrame)
         {
             Application.Quit();
         }
 
         // Maneja el reinicio del juego después de un ganador
-        if (IsGameOver() && Input.GetKeyDown(KeyCode.R))
+        if (IsGameOver() && Keyboard.current.rKey.wasPressedThisFrame)
         {
-            RestartGame(); // Reiniciar manualmente cuando presionas 'R'
+            RestartGame();
         }
         
         // Solo inicia la pelota si el juego no ha terminado
-        if (!running && !IsGameOver() && Input.GetKeyDown(KeyCode.Space))
+        if (!running && !IsGameOver() && Keyboard.current.spaceKey.wasPressedThisFrame)
         {
             pelota.SetActive(true);
             running = true;

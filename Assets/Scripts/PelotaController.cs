@@ -27,7 +27,7 @@ public class PelotaController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.collisionDetectionMode = CollisionDetectionMode2D.Continuous;
         if (manager == null) {
-            manager = Object.FindFirstObjectByType<GameManager>();
+            manager = FindAnyObjectByType<GameManager>();
         }
         int direccionX = Random.Range(0, 2) == 0 ? -1 : 1;
         StartCoroutine(LanzarPelota(direccionX));

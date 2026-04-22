@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PalaController : MonoBehaviour
 {
@@ -7,29 +8,21 @@ public class PalaController : MonoBehaviour
 
     [SerializeField] float speed = 15f;
 
-    // Configuración de las teclas para cada pala (puedes añadir más teclas si es necesario)
-    [SerializeField] KeyCode upKey;
-    [SerializeField] KeyCode downKey;
+    private float inputY; // Guardamos el valor actual del eje
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    // Referencia a la acción de movimiento
+    public void OnMove(InputAction.CallbackContext context)
     {
-        
+        // Lee el valor del eje (1, -1 o 0)
+        inputY = context.ReadValue<float>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        // Movimiento hacia arriba
-        if (Input.GetKey(upKey) && transform.position.y < MAX_Y)
-        {
-            transform.Translate(Vector3.up * speed * Time.deltaTime);
-        }
+        if (inputY == 0) return;
 
-        // Movimiento hacia abajo
-        if (Input.GetKey(downKey) && transform.position.y > MIN_Y)
-        {
-            transform.Translate(Vector3.down * speed * Time.deltaTime);
-        }
+        float newY = transform.position.y + (inputY * speed * Time.deltaTime);
+        newY = Mathf.Clamp(newY, MIN_Y, MAX_Y);
+        transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
 }
