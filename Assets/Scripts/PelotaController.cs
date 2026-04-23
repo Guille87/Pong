@@ -57,6 +57,7 @@ public class PelotaController : MonoBehaviour
         {
             AudioManager.Instance.PlaySound(sfxPaddle, 0.2f);
             IncrementarVelocidad();
+            CorregirAnguloVertical();
         }
         else if (collision.gameObject.CompareTag("Circulos"))
         {
