@@ -16,11 +16,20 @@ public class PelotaController : MonoBehaviour
 
     Rigidbody2D rb;
     private Coroutine corrutinaLanzamiento;
+    private CameraShake camShake;
 
     private const float MIN_ANG = 25f;
     private const float MAX_ANG = 40f;
 
-    void Awake() => rb = GetComponent<Rigidbody2D>();
+    void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        
+        if (Camera.main != null)
+        {
+            camShake = Camera.main.GetComponent<CameraShake>();
+        }
+    }
 
     void OnEnable()
     {
@@ -63,6 +72,8 @@ public class PelotaController : MonoBehaviour
         {
             AudioManager.Instance.PlaySound(sfxWall, 0.2f);
             CorregirAnguloVertical();
+            // Sacudida
+            if (camShake != null) camShake.Shake(0.12f, 0.07f);
         }
         else
         {
@@ -73,6 +84,9 @@ public class PelotaController : MonoBehaviour
     private void CorregirAnguloVertical()
     {
         Vector2 vel = rb.linearVelocity;
+        float magnitudActual = vel.magnitude;
+
+        bool necesitaAjuste = false;
         
         // Si el movimiento horizontal (X) es muy pequeño comparado con el vertical (Y)
         // significa que la pelota está rebotando casi verticalmente.
@@ -80,8 +94,24 @@ public class PelotaController : MonoBehaviour
         {
             // Le damos un impulso mínimo en X para que avance hacia un lado
             // Si vel.x es casi 0, usamos la posición para saber si mandarla a la derecha o izquierda
-            float nuevaX = (vel.x >= 0) ? 5f : -5f;
-            rb.linearVelocity = new Vector2(nuevaX, vel.y);
+            float direccionX = (vel.x >= 0) ? 5f : -5f;
+            vel.x = direccionX;
+            necesitaAjuste = true;
+        }
+
+        if (Mathf.Abs(vel.y) < 0.5f)
+        {
+            // Le damos un pequeño empujón hacia arriba o abajo aleatoriamente
+            float nuevaY = (Random.value > 0.5f) ? 1.5f : -1.5f;
+            vel.y = nuevaY;
+            necesitaAjuste = true;
+        }
+
+        if (necesitaAjuste)
+        {
+            // .normalized mantiene la dirección corregida, 
+            // y al multiplicar por magnitudActual recuperamos la velocidad que tenía.
+            rb.linearVelocity = vel.normalized * magnitudActual;
         }
     }
 
@@ -104,6 +134,8 @@ public class PelotaController : MonoBehaviour
         if (other.CompareTag("Porteria"))
         {
             AudioManager.Instance.PlaySound(sfxFail, 0.3f);
+            // Sacudida fuerte al marcar gol
+            if (camShake != null) camShake.Shake(0.2f, 0.2f);
         }
     }
 }
